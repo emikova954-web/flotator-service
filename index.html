@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Флотатор Северный — Сатуратор</title>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -103,13 +102,8 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.08);
         }
 
-        .main-btn:hover {
-            filter: brightness(0.97);
-        }
-
-        .main-btn:active {
-            transform: scale(0.98);
-        }
+        .main-btn:hover { filter: brightness(0.97); }
+        .main-btn:active { transform: scale(0.98); }
 
         .main-btn .btn-icon {
             font-size: 32px;
@@ -119,9 +113,7 @@
             flex-shrink: 0;
         }
 
-        .main-btn .btn-text {
-            flex: 1;
-        }
+        .main-btn .btn-text { flex: 1; }
 
         .main-btn .btn-sub {
             font-size: 13px;
@@ -136,9 +128,7 @@
             animation: pulse 2s infinite;
         }
 
-        .main-btn.sos .btn-sub {
-            color: rgba(255,255,255,0.8);
-        }
+        .main-btn.sos .btn-sub { color: rgba(255,255,255,0.8); }
 
         @keyframes pulse {
             0%, 100% { box-shadow: 0 0 0 0 rgba(255,59,48,0.4); }
@@ -161,10 +151,7 @@
             margin-bottom: 6px;
         }
 
-        .last-event .event-row {
-            font-size: 15px;
-            color: #1c1c1e;
-        }
+        .last-event .event-row { font-size: 15px; color: #1c1c1e; }
 
         .back-btn {
             display: inline-block;
@@ -178,9 +165,7 @@
             font-weight: 500;
         }
 
-        .back-btn:hover {
-            opacity: 0.7;
-        }
+        .back-btn:hover { opacity: 0.7; }
 
         .reg-section {
             background: #ffffff;
@@ -206,21 +191,9 @@
             font-size: 15px;
         }
 
-        .reg-item:last-child {
-            border-bottom: none;
-        }
-
-        .reg-item .param {
-            font-weight: 600;
-            min-width: 130px;
-            color: #636366;
-        }
-
-        .reg-item .value {
-            color: #1c1c1e;
-            flex: 1;
-            min-width: 150px;
-        }
+        .reg-item:last-child { border-bottom: none; }
+        .reg-item .param { font-weight: 600; min-width: 130px; color: #636366; }
+        .reg-item .value { color: #1c1c1e; flex: 1; min-width: 150px; }
 
         .event-card {
             background: #ffffff;
@@ -231,34 +204,13 @@
             border-left: 4px solid #007aff;
         }
 
-        .event-card.planned {
-            border-left-color: #34c759;
-        }
+        .event-card.planned { border-left-color: #34c759; }
+        .event-card.defect { border-left-color: #ff3b30; }
+        .event-card .event-date { font-size: 13px; color: #8e8e93; margin-bottom: 4px; }
+        .event-card .event-desc { font-size: 15px; color: #1c1c1e; margin-bottom: 4px; }
+        .event-card .event-who { font-size: 13px; color: #636366; }
 
-        .event-card.defect {
-            border-left-color: #ff3b30;
-        }
-
-        .event-card .event-date {
-            font-size: 13px;
-            color: #8e8e93;
-            margin-bottom: 4px;
-        }
-
-        .event-card .event-desc {
-            font-size: 15px;
-            color: #1c1c1e;
-            margin-bottom: 4px;
-        }
-
-        .event-card .event-who {
-            font-size: 13px;
-            color: #636366;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
+        .form-group { margin-bottom: 16px; }
 
         .form-label {
             font-size: 14px;
@@ -284,20 +236,9 @@
             font-size: 16px;
         }
 
-        .radio-option:last-child {
-            border-bottom: none;
-        }
-
-        .radio-option:hover {
-            background: #f9f9fb;
-        }
-
-        .radio-option input {
-            margin-right: 12px;
-            width: 22px;
-            height: 22px;
-            accent-color: #007aff;
-        }
+        .radio-option:last-child { border-bottom: none; }
+        .radio-option:hover { background: #f9f9fb; }
+        .radio-option input { margin-right: 12px; width: 22px; height: 22px; accent-color: #007aff; }
 
         .textarea-field {
             width: 100%;
@@ -325,14 +266,8 @@
             font-weight: 500;
         }
 
-        .voice-btn:hover {
-            background: #e5e5ea;
-        }
-
-        .voice-btn:active {
-            background: #ff3b30;
-            color: #ffffff;
-        }
+        .voice-btn:hover { background: #e5e5ea; }
+        .voice-btn:active { background: #ff3b30; color: #ffffff; }
 
         .photo-area {
             background: #ffffff;
@@ -344,15 +279,8 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.08);
         }
 
-        .photo-area:hover {
-            border-color: #007aff;
-        }
-
-        .photo-area .icon {
-            font-size: 40px;
-            display: block;
-            margin-bottom: 8px;
-        }
+        .photo-area:hover { border-color: #007aff; }
+        .photo-area .icon { font-size: 40px; display: block; margin-bottom: 8px; }
 
         .upload-status {
             display: none;
@@ -375,18 +303,9 @@
             transition: transform 0.1s;
         }
 
-        .submit-btn:hover {
-            background: #30b350;
-        }
-
-        .submit-btn:active {
-            transform: scale(0.98);
-        }
-
-        .submit-btn:disabled {
-            background: #8e8e93;
-            cursor: not-allowed;
-        }
+        .submit-btn:hover { background: #30b350; }
+        .submit-btn:active { transform: scale(0.98); }
+        .submit-btn:disabled { background: #8e8e93; cursor: not-allowed; }
 
         .toast {
             position: fixed;
@@ -559,7 +478,7 @@
 
             <div class="form-group">
                 <label class="form-label">Шаг 4: Необходимые материалы</label>
-                <textarea class="textarea-field" id="materials" placeholder="Например: торцевое уплотнение 45 мм, масло Shell Omala 1 л, прокладка фланцевая DN50" style="min-height:80px;"></textarea>
+                <textarea class="textarea-field" id="materials" placeholder="Например: торцевое уплотнение 45 мм, масло Shell Omala 1 л" style="min-height:80px;"></textarea>
                 <button class="voice-btn" onclick="startVoiceMaterials()">🎤 Нажмите и говорите</button>
             </div>
 
@@ -577,10 +496,10 @@
     </div>
 
     <script>
-        emailjs.init('gjoxHAzZB7ZfgxyKY');
-
         let photoUrl = '';
         const IMGBB_KEY = 'f6cba694da291b70a356116b49b5f595';
+        const SINGULARITY_TOKEN = 'c769f162-aa70-425b-aac1-6114cce14e6f';
+        const PROJECT_ID = 'P-49568f0c-247b-4407-8ac7-77557ee092f4';
 
         function showScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -590,20 +509,15 @@
 
         function startVoice() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) {
-                alert('Голосовой ввод не поддерживается. Используйте Chrome.');
-                return;
-            }
+            if (!SpeechRecognition) { alert('Голосовой ввод не поддерживается. Используйте Chrome.'); return; }
             const rec = new SpeechRecognition();
             rec.lang = 'ru-RU';
             rec.interimResults = false;
             rec.start();
-
             const btn = document.querySelectorAll('.voice-btn')[0];
             btn.textContent = '🎤 Говорите...';
             btn.style.background = '#ff3b30';
             btn.style.color = '#fff';
-
             rec.onresult = e => {
                 document.getElementById('desc').value = e.results[0][0].transcript;
                 btn.textContent = '🎤 Нажмите и говорите';
@@ -619,20 +533,15 @@
 
         function startVoiceMaterials() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) {
-                alert('Голосовой ввод не поддерживается. Используйте Chrome.');
-                return;
-            }
+            if (!SpeechRecognition) { alert('Голосовой ввод не поддерживается. Используйте Chrome.'); return; }
             const rec = new SpeechRecognition();
             rec.lang = 'ru-RU';
             rec.interimResults = false;
             rec.start();
-
             const btn = document.querySelectorAll('.voice-btn')[1];
             btn.textContent = '🎤 Говорите...';
             btn.style.background = '#ff3b30';
             btn.style.color = '#fff';
-
             rec.onresult = e => {
                 document.getElementById('materials').value = e.results[0][0].transcript;
                 btn.textContent = '🎤 Нажмите и говорите';
@@ -649,16 +558,13 @@
         function uploadPhoto() {
             const file = document.getElementById('photo-input').files[0];
             if (!file) return;
-
             document.getElementById('photo-text').textContent = '📎 ' + file.name;
             const status = document.getElementById('upload-status');
             status.style.display = 'block';
             status.textContent = '⏳ Загрузка фото...';
             status.style.color = '#007aff';
-
             const fd = new FormData();
             fd.append('image', file);
-
             fetch('https://api.imgbb.com/1/upload?key=' + IMGBB_KEY, { method: 'POST', body: fd })
             .then(r => r.json())
             .then(data => {
@@ -697,26 +603,46 @@
                 'planned': '🟢 Планово'
             };
 
+            const now = new Date().toLocaleString('ru-RU');
+
+            const note = [
+                'Объект: Флотатор автомойка Северный',
+                'Узел: Сатуратор напорный',
+                'Тип: ' + eventLabels[eventType],
+                'Срочность: ' + urgencyLabels[urgency],
+                'Описание: ' + desc,
+                'Материалы: ' + (materials || 'Не указаны'),
+                'Дата: ' + now,
+                'Фото: ' + (photoUrl || 'Нет')
+            ].join('\n');
+
             const btn = document.getElementById('submit-btn');
             btn.textContent = '⏳ Отправка...';
             btn.disabled = true;
 
-            const params = {
-                object: 'Флотатор автомойка Северный',
-                node: 'Сатуратор напорный',
-                event_type: eventLabels[eventType],
-                urgency: urgencyLabels[urgency],
-                description: desc,
-                materials: materials || 'Не указаны',
-                date: new Date().toLocaleString('ru-RU'),
-                photo: photoUrl || 'Фото не прикреплено'
+            const taskData = {
+                title: eventLabels[eventType] + ' — Сатуратор',
+                note: note,
+                projectId: PROJECT_ID,
+                priority: urgency === 'critical' ? 0 : 1
             };
 
-            console.log('Отправка заявки:', params);
-
-            emailjs.send('service_v327178', 'template_itv3qkh', params)
-            .then(() => {
+            fetch('https://api.singularity-app.com/v2/task', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + SINGULARITY_TOKEN,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(taskData)
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+                return response.json();
+            })
+            .then(data => {
+                console.log('Задача создана:', data);
                 const toast = document.getElementById('toast');
+                toast.textContent = '✅ Заявка в SingularityApp!';
                 toast.classList.add('show');
                 setTimeout(() => {
                     toast.classList.remove('show');
@@ -733,7 +659,7 @@
             })
             .catch(err => {
                 console.error('Ошибка:', err);
-                alert('Не удалось отправить заявку.');
+                alert('Не удалось отправить заявку. Проверьте интернет.');
                 btn.textContent = '✅ ОТПРАВИТЬ ЗАЯВКУ';
                 btn.disabled = false;
             });
