@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Отчёты по ТО — Флотатор Северный</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f2f2f7; color: #1c1c1e; min-height: 100vh; display: flex; justify-content: center; }
+        .app-container { width: 100%; max-width: 600px; background: #f2f2f7; min-height: 100vh; padding: 24px 16px; }
+        @media (min-width: 769px) { body { background: #e8e8ed; padding: 20px 0; } .app-container { border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); min-height: calc(100vh - 40px); } }
+        .back-link { display: inline-block; font-size: 16px; color: #007aff; margin-bottom: 20px; text-decoration: none; font-weight: 500; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header .icon { font-size: 48px; display: block; margin-bottom: 8px; }
+        .header h1 { font-size: 22px; font-weight: 700; }
+        .header p { font-size: 14px; color: #8e8e93; }
+
+        .stats { display: flex; gap: 10px; margin-bottom: 20px; }
+        .stat-card { flex: 1; background: #ffffff; border-radius: 16px; padding: 16px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .stat-card .number { font-size: 28px; font-weight: 700; }
+        .stat-card .label { font-size: 12px; color: #8e8e93; margin-top: 4px; }
+        .stat-card.green .number { color: #34c759; }
+        .stat-card.red .number { color: #ff3b30; }
+        .stat-card.blue .number { color: #007aff; }
+
+        .filters { background: #ffffff; border-radius: 16px; padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .filters select, .filters input { width: 100%; padding: 12px; border: 1px solid #e5e5ea; border-radius: 12px; font-size: 15px; margin-bottom: 8px; background: #f9f9fb; }
+        .filters .btn-row { display: flex; gap: 8px; }
+        .filters button { flex: 1; padding: 12px; border: none; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; }
+        .btn-apply { background: #007aff; color: #fff; }
+        .btn-reset { background: #f2f2f7; color: #007aff; }
+        .btn-csv { background: #34c759; color: #fff; margin-top: 8px; width: 100%; }
+
+        .task-list { margin-bottom: 20px; }
+        .task-card { background: #ffffff; border-radius: 16px; padding: 16px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border-left: 4px solid #007aff; }
+        .task-card.planned { border-left-color: #34c759; }
+        .task-card.defect { border-left-color: #ff3b30; }
+        .task-card.replace { border-left-color: #ffcc00; }
+        .task-card .task-title { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+        .task-card .task-info { font-size: 13px; color: #8e8e93; line-height: 1.6; }
+        .task-card .task-date { font-size: 12px; color: #c7c7cc; margin-top: 6px; }
+
+        .empty { text-align: center; padding: 40px 20px; color: #8e8e93; }
+        .empty .icon { font-size: 56px; display: block; margin-bottom: 12px; }
+        .loading { text-align: center; padding: 40px; }
+        .loading .spinner { display: inline-block; width: 40px; height: 40px; border: 4px solid #e5e5ea; border-top-color: #007aff; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <a href="index.html" class="back-link">← На главную</a>
+        <div class="header">
+            <span class="icon">📊</span>
+            <h1>Отчёты по ТО</h1>
+            <p>Флотатор автомойка Северный</p>
+        </div>
+
+        <div class="stats" id="stats">
+            <div class="stat-card blue"><div class="number" id="total-count">—</div><div class="label">Всего</div></div>
+            <div class="stat-card green"><div class="number" id="planned-count">—</div><div class="label">Плановые</div></div>
+            <div class="stat-card red"><div class="number" id="defect-count">—</div><div class="label">Дефекты</div></div>
+        </div>
+
+        <div class="filters">
+            <select id="filter-node" onchange="applyFilters()">
+                <option value="all">Все узлы</option>
+            </select>
+            <select id="filter-type" onchange="applyFilters()">
+                <option value="all">Все типы</option>
+                <option value="planned">🟢 Плановое ТО</option>
+                <option value="defect">🔴 Дефект</option>
+                <option value="replace">🟡 Замена</option>
+            </select>
+            <div class="btn-row">
+                <button class="btn-reset" onclick="resetFilters()">Сбросить</button>
+                <button class="btn-apply" onclick="loadTasks()">🔄 Обновить</button>
+            </div>
+            <button class="btn-csv" onclick="exportCSV()">📥 Скачать CSV</button>
+        </div>
+
+        <div class="task-list" id="task-list">
+            <div class="loading"><div class="spinner"></div></div>
+        </div>
+    </div>
+
+    <script>
+        const SINGULARITY_TOKEN = 'c769f162-aa70-425b-aac1-6114cce14e6f';
+        const PROJECT_ID = 'P-49568f0c-247b-4407-8ac7-77557ee092f4';
+        const NODES = ['Камера флотации', 'Сатуратор', 'Обвязка сатуратора', 'Скребковый механизм', 'Система подачи реагентов', 'Компрессор сатуратора', 'Насос подачи на флотатор', 'Насос рециркуляции'];
+
+        let allTasks = [];
+
+        // Заполнить выпадающий список узлов
+        const nodeSelect = document.getElementById('filter-node');
+        NODES.forEach(node => {
+            const opt = document.createElement('option');
+            opt.value = node;
+            opt.textContent = node;
+            nodeSelect.appendChild(opt);
+        });
+
+        function loadTasks() {
+            document.getElementById('task-list').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+
+            fetch('https://api.singularity-app.com/v2/task?projectId=' + PROJECT_ID + '&maxCount=100', {
+                method: 'GET',
+                headers: { 'Authorization': 'Bearer ' + SINGULARITY_TOKEN, 'Content-Type': 'application/json' }
+            })
+            .then(r => r.json())
+            .then(tasks => {
+                allTasks = tasks;
+                applyFilters();
+            })
+            .catch(err => {
+                document.getElementById('task-list').innerHTML = '<div class="empty"><span class="icon">❌</span><p>Ошибка загрузки. Проверьте интернет.</p></div>';
+            });
+        }
+
+        function applyFilters() {
+            const nodeFilter = document.getElementById('filter-node').value;
+            const typeFilter = document.getElementById('filter-type').value;
+
+            let filtered = allTasks;
+
+            if (nodeFilter !== 'all') {
+                filtered = filtered.filter(t => t.note && t.note.includes('Узел: ' + nodeFilter));
+            }
+            if (typeFilter !== 'all') {
+                const typeLabels = { 'planned': '🟢 Плановое ТО', 'defect': '🔴 Дефект', 'replace': '🟡 Замена оборудования' };
+                filtered = filtered.filter(t => t.title && t.title.includes(typeLabels[typeFilter]));
+            }
+
+            renderTasks(filtered);
+        }
+
+        function resetFilters() {
+            document.getElementById('filter-node').value = 'all';
+            document.getElementById('filter-type').value = 'all';
+            applyFilters();
+        }
+
+        function renderTasks(tasks) {
+            const container = document.getElementById('task-list');
+
+            // Статистика
+            document.getElementById('total-count').textContent = allTasks.length;
+            document.getElementById('planned-count').textContent = allTasks.filter(t => t.title && t.title.includes('🟢')).length;
+            document.getElementById('defect-count').textContent = allTasks.filter(t => t.title && t.title.includes('🔴')).length;
+
+            if (tasks.length === 0) {
+                container.innerHTML = '<div class="empty"><span class="icon">📭</span><p>Нет заявок</p></div>';
+                return;
+            }
+
+            container.innerHTML = tasks.map(t => {
+                const title = t.title || 'Без названия';
+                const note = t.note || '';
+                const date = t.createdDate ? new Date(t.createdDate).toLocaleString('ru-RU') : '—';
+
+                let cssClass = '';
+                if (title.includes('🟢')) cssClass = 'planned';
+                else if (title.includes('🔴')) cssClass = 'defect';
+                else if (title.includes('🟡')) cssClass = 'replace';
+
+                // Извлекаем данные из note
+                const nodeMatch = note.match(/Узел: (.+)/);
+                const descMatch = note.match(/Описание: (.+)/);
+                const materialsMatch = note.match(/Материалы: (.+)/);
+                const photoMatch = note.match(/Фото: (.+)/);
+
+                const node = nodeMatch ? nodeMatch[1] : '—';
+                const desc = descMatch ? descMatch[1] : note.substring(0, 100);
+                const materials = materialsMatch ? materialsMatch[1] : '—';
+                const photo = photoMatch ? photoMatch[1] : '';
+
+                return `
+                <div class="task-card ${cssClass}">
+                    <div class="task-title">${title}</div>
+                    <div class="task-info">
+                        🔧 ${node}<br>
+                        📝 ${desc}<br>
+                        📦 Материалы: ${materials}<br>
+                        ${photo && photo !== 'Нет' && photo !== 'Фото не прикреплено' ? '📸 <a href="' + photo + '" target="_blank">Фото</a><br>' : ''}
+                    </div>
+                    <div class="task-date">🕐 ${date}</div>
+                </div>`;
+            }).join('');
+        }
+
+        function exportCSV() {
+            let csv = 'Дата;Тип;Узел;Описание;Материалы;Фото\n';
+            allTasks.forEach(t => {
+                const note = t.note || '';
+                const nodeMatch = note.match(/Узел: (.+)/);
+                const descMatch = note.match(/Описание: (.+)/);
+                const materialsMatch = note.match(/Материалы: (.+)/);
+                const photoMatch = note.match(/Фото: (.+)/);
+
+                const row = [
+                    t.createdDate ? new Date(t.createdDate).toLocaleString('ru-RU') : '',
+                    (t.title || '').replace(/;/, ','),
+                    (nodeMatch ? nodeMatch[1] : '').replace(/;/, ','),
+                    (descMatch ? descMatch[1] : '').replace(/;/, ','),
+                    (materialsMatch ? materialsMatch[1] : '').replace(/;/, ','),
+                    (photoMatch ? photoMatch[1] : '').replace(/;/, ',')
+                ];
+                csv += row.join(';') + '\n';
+            });
+
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'otchety_to_' + new Date().toISOString().slice(0, 10) + '.csv';
+            link.click();
+        }
+
+        // Загрузка при открытии
+        loadTasks();
+    </script>
+</body>
+</html>
