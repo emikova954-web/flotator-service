@@ -3,71 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Обслуживание очистных сооружений</title>
+    <title>Флотатор Северный — Узлы</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f2f2f7;
-            color: #1c1c1e;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-        }
-        .app-container {
-            width: 100%;
-            max-width: 480px;
-            background: #f2f2f7;
-            min-height: 100vh;
-            padding: 24px 16px;
-        }
-        @media (min-width: 769px) {
-            body { background: #e8e8ed; padding: 20px 0; }
-            .app-container {
-                border-radius: 20px;
-                box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-                min-height: calc(100vh - 40px);
-            }
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 32px;
-        }
-        .header .logo { font-size: 56px; display: block; margin-bottom: 12px; }
-        .header h1 { font-size: 22px; font-weight: 700; }
-        .header p { font-size: 14px; color: #8e8e93; margin-top: 4px; }
-        .object-card {
-            display: block;
-            background: #ffffff;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 12px;
-            text-decoration: none;
-            color: #1c1c1e;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-            transition: transform 0.1s;
-        }
-        .object-card:active { transform: scale(0.98); }
-        .object-card .icon { font-size: 36px; margin-right: 16px; }
-        .object-card .title { font-size: 18px; font-weight: 600; }
-        .object-card .subtitle { font-size: 13px; color: #8e8e93; margin-top: 2px; }
-        .object-card .arrow { float: right; color: #c7c7cc; font-size: 20px; margin-top: 8px; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f2f2f7; color: #1c1c1e; min-height: 100vh; display: flex; justify-content: center; }
+        .app-container { width: 100%; max-width: 480px; background: #f2f2f7; min-height: 100vh; padding: 24px 16px; }
+        @media (min-width: 769px) { body { background: #e8e8ed; padding: 20px 0; } .app-container { border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); min-height: calc(100vh - 40px); } }
+        .back-link { display: inline-block; font-size: 16px; color: #007aff; margin-bottom: 20px; text-decoration: none; font-weight: 500; }
+        .header { text-align: center; margin-bottom: 24px; }
+        .header .icon { font-size: 48px; display: block; margin-bottom: 8px; }
+        .header h1 { font-size: 20px; font-weight: 700; }
+        .header p { font-size: 14px; color: #8e8e93; }
+        .node-card { display: block; background: #ffffff; border-radius: 16px; padding: 18px 20px; margin-bottom: 10px; text-decoration: none; color: #1c1c1e; box-shadow: 0 1px 3px rgba(0,0,0,0.08); transition: transform 0.1s; }
+        .node-card:active { transform: scale(0.98); }
+        .node-card .emoji { font-size: 28px; margin-right: 14px; }
+        .node-card .title { font-size: 16px; font-weight: 600; }
+        .node-card .subtitle { font-size: 13px; color: #8e8e93; }
+        .node-card .arrow { float: right; color: #c7c7cc; font-size: 20px; margin-top: 4px; }
     </style>
 </head>
 <body>
     <div class="app-container">
+        <a href="../" class="back-link">← На главную</a>
         <div class="header">
-            <span class="logo">🔧</span>
-            <h1>Обслуживание очистных сооружений</h1>
-            <p>Цифровые паспорта оборудования</p>
-        </div>
-
-        <a href="flotator-severny/" class="object-card">
             <span class="icon">🏭</span>
-            <span class="title">Флотатор автомойка Северный</span>
-            <span class="subtitle">Напорный флотатор • 8 узлов</span>
-            <span class="arrow">›</span>
-        </a>
+            <h1>Флотатор автомойка Северный</h1>
+            <p>Напорный флотатор • 8 узлов</p>
+        </div>
+        <a href="kamera-flotacii.html" class="node-card"><span class="emoji">📦</span><span class="title">Камера флотации</span><span class="subtitle">Основная ёмкость, скребки, перегородки</span><span class="arrow">›</span></a>
+        <a href="saturator.html" class="node-card"><span class="emoji">🫧</span><span class="title">Сатуратор</span><span class="subtitle">Насыщение воды воздухом, 3.5–6 бар</span><span class="arrow">›</span></a>
+        <a href="obvyazka-saturatora.html" class="node-card"><span class="emoji">🔗</span><span class="title">Обвязка сатуратора</span><span class="subtitle">Трубопроводы, клапаны, КИП</span><span class="arrow">›</span></a>
+        <a href="skrebkovy-mehanizm.html" class="node-card"><span class="emoji">⚙️</span><span class="title">Скребковый механизм</span><span class="subtitle">Привод, цепь, планки, удаление шлама</span><span class="arrow">›</span></a>
+        <a href="sistema-reagentov.html" class="node-card"><span class="emoji">🧪</span><span class="title">Система подачи реагентов</span><span class="subtitle">Коагулянт, флокулянт, дозаторы</span><span class="arrow">›</span></a>
+        <a href="kompressor-saturatora.html" class="node-card"><span class="emoji">💨</span><span class="title">Компрессор сатуратора</span><span class="subtitle">Подача воздуха в сатуратор</span><span class="arrow">›</span></a>
+        <a href="nasos-podachi.html" class="node-card"><span class="emoji">📥</span><span class="title">Насос подачи на флотатор</span><span class="subtitle">Подача исходной воды</span><span class="arrow">›</span></a>
+        <a href="nasos-recirkulyacii.html" class="node-card"><span class="emoji">🔄</span><span class="title">Насос рециркуляции</span><span class="subtitle">Подача воды в сатуратор</span><span class="arrow">›</span></a>
     </div>
 </body>
 </html>
