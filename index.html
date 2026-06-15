@@ -3,50 +3,243 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Обслуживание очистных сооружений</title>
+    <title>Флотатор Северный — Обслуживание</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f2f2f7; color: #1c1c1e; min-height: 100vh; display: flex; justify-content: center; }
-        .app-container { width: 100%; max-width: 480px; background: #f2f2f7; min-height: 100vh; padding: 24px 16px; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f2f2f7; color: #1c1c1e; min-height: 100vh; -webkit-tap-highlight-color: transparent; user-select: none; display: flex; justify-content: center; }
+        .app-container { width: 100%; max-width: 480px; background: #f2f2f7; min-height: 100vh; position: relative; padding: 20px 16px 40px; }
         @media (min-width: 769px) { body { background: #e8e8ed; padding: 20px 0; } .app-container { border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); min-height: calc(100vh - 40px); } }
-        .header { text-align: center; margin-bottom: 28px; }
-        .header .logo { font-size: 56px; display: block; margin-bottom: 12px; }
-        .header h1 { font-size: 22px; font-weight: 700; }
-        .header p { font-size: 14px; color: #8e8e93; margin-top: 4px; }
-        .section-title { font-size: 13px; color: #8e8e93; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; margin-top: 20px; }
-        .card { display: block; background: #ffffff; border-radius: 16px; padding: 18px 20px; margin-bottom: 10px; text-decoration: none; color: #1c1c1e; box-shadow: 0 1px 3px rgba(0,0,0,0.08); transition: transform 0.1s; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header .logo { font-size: 48px; display: block; margin-bottom: 8px; }
+        .header h1 { font-size: 20px; font-weight: 700; }
+        .header p { font-size: 13px; color: #8e8e93; }
+
+        .sos-btn { display: flex; align-items: center; justify-content: center; width: 100%; padding: 20px; margin-bottom: 20px; border: none; border-radius: 16px; font-size: 20px; font-weight: 700; cursor: pointer; background: #ff3b30; color: #ffffff; animation: pulse 2s infinite; box-shadow: 0 4px 12px rgba(255,59,48,0.3); }
+        .sos-btn:active { transform: scale(0.96); }
+        .sos-btn .icon { font-size: 32px; margin-right: 12px; }
+        @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(255,59,48,0.4); } 50% { box-shadow: 0 0 0 16px rgba(255,59,48,0); } }
+
+        .section-title { font-size: 13px; color: #8e8e93; text-transform: uppercase; letter-spacing: 0.5px; margin: 20px 0 10px; }
+
+        .last-issues { background: #ffffff; border-radius: 16px; padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .last-issues .issue { padding: 8px 0; border-bottom: 1px solid #f2f2f7; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+        .last-issues .issue:last-child { border-bottom: none; }
+        .last-issues .issue .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+        .last-issues .issue .dot.green { background: #34c759; }
+        .last-issues .issue .dot.red { background: #ff3b30; }
+        .last-issues .issue .dot.yellow { background: #ffcc00; }
+
+        .card { display: block; background: #ffffff; border-radius: 16px; padding: 16px 18px; margin-bottom: 8px; text-decoration: none; color: #1c1c1e; box-shadow: 0 1px 3px rgba(0,0,0,0.08); transition: transform 0.1s; }
         .card:active { transform: scale(0.98); }
-        .card .emoji { font-size: 28px; margin-right: 14px; }
-        .card .title { font-size: 16px; font-weight: 600; }
-        .card .subtitle { font-size: 13px; color: #8e8e93; }
-        .card .arrow { float: right; color: #c7c7cc; font-size: 20px; margin-top: 4px; }
+        .card .emoji { font-size: 26px; margin-right: 12px; }
+        .card .title { font-size: 15px; font-weight: 600; }
+        .card .subtitle { font-size: 12px; color: #8e8e93; }
+        .card .arrow { float: right; color: #c7c7cc; font-size: 18px; margin-top: 2px; }
+
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100; justify-content: center; align-items: flex-end; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: #f2f2f7; width: 100%; max-width: 480px; border-radius: 20px 20px 0 0; padding: 20px 16px 40px; max-height: 90vh; overflow-y: auto; }
+        .modal h2 { text-align: center; margin-bottom: 16px; font-size: 20px; }
+        .modal .close-btn { float: right; font-size: 24px; cursor: pointer; background: none; border: none; color: #007aff; padding: 8px; }
+        .form-group { margin-bottom: 14px; }
+        .form-label { font-size: 14px; font-weight: 600; color: #1c1c1e; margin-bottom: 6px; display: block; }
+        .radio-group, .checkbox-group { background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .radio-option, .checkbox-option { display: flex; align-items: center; padding: 14px 16px; border-bottom: 1px solid #f2f2f7; cursor: pointer; font-size: 15px; }
+        .radio-option:last-child, .checkbox-option:last-child { border-bottom: none; }
+        .radio-option input, .checkbox-option input { margin-right: 12px; width: 20px; height: 20px; accent-color: #007aff; }
+        .textarea-field, select { width: 100%; padding: 14px; border: none; border-radius: 16px; font-size: 15px; background: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.08); font-family: inherit; }
+        .voice-btn { width: 100%; padding: 12px; margin-top: 6px; background: #f2f2f7; border: none; border-radius: 12px; font-size: 15px; cursor: pointer; color: #007aff; font-weight: 500; }
+        .voice-btn:active { background: #ff3b30; color: #fff; }
+        .photo-area { background: #ffffff; border: 2px dashed #c7c7cc; border-radius: 16px; padding: 24px; text-align: center; cursor: pointer; }
+        .photo-area .icon { font-size: 36px; display: block; margin-bottom: 6px; }
+        .upload-status { display: none; margin-top: 6px; font-size: 13px; text-align: center; }
+        .submit-btn { width: 100%; padding: 16px; background: #34c759; color: #fff; border: none; border-radius: 16px; font-size: 18px; font-weight: 700; cursor: pointer; margin-top: 8px; }
+        .submit-btn:active { transform: scale(0.98); }
+        .submit-btn:disabled { background: #8e8e93; }
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #34c759; color: #fff; padding: 14px 24px; border-radius: 12px; font-weight: 600; z-index: 200; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .toast.show { display: block; animation: fadeInOut 2s ease; }
+        @keyframes fadeInOut { 0% { opacity: 0; top: 0; } 15% { opacity: 1; top: 20px; } 85% { opacity: 1; top: 20px; } 100% { opacity: 0; top: 0; } }
     </style>
 </head>
 <body>
     <div class="app-container">
+        <div class="toast" id="toast">✅ Заявка отправлена!</div>
+
         <div class="header">
-            <span class="logo">🔧</span>
-            <h1>Обслуживание очистных сооружений</h1>
-            <p>Цифровые паспорта оборудования</p>
+            <span class="logo">🏭</span>
+            <h1>Флотатор автомойка Северный</h1>
+            <p>Напорный флотатор • Цифровой паспорт</p>
         </div>
 
-        <div class="section-title">📊 Сервис</div>
-        <a href="otchety.html" class="card">
-            <span class="emoji">📊</span>
-            <span class="title">Отчёты по ТО</span>
-            <span class="subtitle">Статистика, фильтры, выгрузка CSV</span>
-            <span class="arrow">›</span>
-        </a>
+        <button class="sos-btn" onclick="openQuickForm()">
+            <span class="icon">🚨</span> Аварийная заявка
+        </button>
 
-        <div class="section-title">🏭 Флотатор автомойка Северный</div>
-        <a href="kamera-flotacii.html" class="card"><span class="emoji">📦</span><span class="title">Камера флотации</span><span class="subtitle">Основная ёмкость, скребки, перегородки</span><span class="arrow">›</span></a>
-        <a href="saturator.html" class="card"><span class="emoji">🫧</span><span class="title">Сатуратор</span><span class="subtitle">Насыщение воды воздухом, 3.5–6 бар</span><span class="arrow">›</span></a>
+        <div class="last-issues" id="last-issues">
+            <div style="font-size:13px;color:#8e8e93;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">📋 Последние события</div>
+            <div style="text-align:center;color:#8e8e93;font-size:14px;">Загрузка...</div>
+        </div>
+
+        <div class="section-title">🔧 Узлы оборудования</div>
+        <a href="kamera-flotacii.html" class="card"><span class="emoji">📦</span><span class="title">Камера флотации</span><span class="subtitle">Корпус, скребки, перегородки</span><span class="arrow">›</span></a>
+        <a href="saturator.html" class="card"><span class="emoji">🫧</span><span class="title">Сатуратор</span><span class="subtitle">Насыщение воздухом, 3.5–6 бар</span><span class="arrow">›</span></a>
         <a href="obvyazka-saturatora.html" class="card"><span class="emoji">🔗</span><span class="title">Обвязка сатуратора</span><span class="subtitle">Трубопроводы, клапаны, КИП</span><span class="arrow">›</span></a>
-        <a href="skrebkovy-mehanizm.html" class="card"><span class="emoji">⚙️</span><span class="title">Скребковый механизм</span><span class="subtitle">Привод, цепь, планки, удаление шлама</span><span class="arrow">›</span></a>
+        <a href="skrebkovy-mehanizm.html" class="card"><span class="emoji">⚙️</span><span class="title">Скребковый механизм</span><span class="subtitle">Привод, цепь, планки</span><span class="arrow">›</span></a>
         <a href="sistema-reagentov.html" class="card"><span class="emoji">🧪</span><span class="title">Система подачи реагентов</span><span class="subtitle">Коагулянт, флокулянт, дозаторы</span><span class="arrow">›</span></a>
-        <a href="kompressor-saturatora.html" class="card"><span class="emoji">💨</span><span class="title">Компрессор сатуратора</span><span class="subtitle">Подача воздуха в сатуратор</span><span class="arrow">›</span></a>
-        <a href="nasos-podachi.html" class="card"><span class="emoji">📥</span><span class="title">Насос подачи на флотатор</span><span class="subtitle">Подача исходной воды</span><span class="arrow">›</span></a>
+        <a href="kompressor-saturatora.html" class="card"><span class="emoji">💨</span><span class="title">Компрессор сатуратора</span><span class="subtitle">Подача воздуха</span><span class="arrow">›</span></a>
+        <a href="nasos-podachi.html" class="card"><span class="emoji">📥</span><span class="title">Насос подачи</span><span class="subtitle">Подача исходной воды</span><span class="arrow">›</span></a>
         <a href="nasos-recirkulyacii.html" class="card"><span class="emoji">🔄</span><span class="title">Насос рециркуляции</span><span class="subtitle">Подача воды в сатуратор</span><span class="arrow">›</span></a>
+
+        <div class="section-title">📊 Сервис</div>
+        <a href="otchety.html" class="card"><span class="emoji">📊</span><span class="title">Отчёты по ТО</span><span class="subtitle">Статистика, фильтры, CSV</span><span class="arrow">›</span></a>
     </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО БЫСТРОЙ ЗАЯВКИ -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal">
+            <button class="close-btn" onclick="closeQuickForm()">✕ Закрыть</button>
+            <h2>🚨 Аварийная заявка</h2>
+
+            <div class="form-group">
+                <label class="form-label">Узел</label>
+                <select id="quick-node">
+                    <option value="">Выберите узел...</option>
+                    <option value="Камера флотации">📦 Камера флотации</option>
+                    <option value="Сатуратор">🫧 Сатуратор</option>
+                    <option value="Обвязка сатуратора">🔗 Обвязка сатуратора</option>
+                    <option value="Скребковый механизм">⚙️ Скребковый механизм</option>
+                    <option value="Система подачи реагентов">🧪 Система реагентов</option>
+                    <option value="Компрессор сатуратора">💨 Компрессор</option>
+                    <option value="Насос подачи на флотатор">📥 Насос подачи</option>
+                    <option value="Насос рециркуляции">🔄 Насос рециркуляции</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Тип проблемы (можно несколько)</label>
+                <div class="checkbox-group" id="quick-problems">
+                    <label class="checkbox-option"><input type="checkbox" value="Течь" onchange="updateQuickDesc()">💧 Течь</label>
+                    <label class="checkbox-option"><input type="checkbox" value="Посторонний шум" onchange="updateQuickDesc()">🔊 Посторонний шум</label>
+                    <label class="checkbox-option"><input type="checkbox" value="Вибрация" onchange="updateQuickDesc()">📳 Вибрация</label>
+                    <label class="checkbox-option"><input type="checkbox" value="Падение давления" onchange="updateQuickDesc()">📉 Падение давления</label>
+                    <label class="checkbox-option"><input type="checkbox" value="Не включается" onchange="updateQuickDesc()">🔌 Не включается</label>
+                    <label class="checkbox-option"><input type="checkbox" value="Перегрев" onchange="updateQuickDesc()">🔥 Перегрев</label>
+                    <label class="checkbox-option"><input type="checkbox" value="Запах гари" onchange="updateQuickDesc()">👃 Запах гари</label>
+                    <label class="checkbox-option"><input type="checkbox" value="Протечка масла" onchange="updateQuickDesc()">🛢 Протечка масла</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Дополнительно (голосом или текстом)</label>
+                <textarea class="textarea-field" id="quick-desc" placeholder="Опишите подробнее..." style="min-height:60px;"></textarea>
+                <button class="voice-btn" onclick="quickVoice()">🎤 Нажмите и говорите</button>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Фото</label>
+                <div class="photo-area" onclick="document.getElementById('quick-photo').click()">
+                    <span class="icon">📸</span>
+                    <span id="quick-photo-text">Нажмите, чтобы сделать фото</span>
+                </div>
+                <input type="file" id="quick-photo" accept="image/*" capture="environment" style="display:none" onchange="quickPhotoAttached()">
+                <div class="upload-status" id="quick-upload-status">⏳ Загрузка...</div>
+            </div>
+
+            <button class="submit-btn" id="quick-submit" onclick="quickSubmit()">✅ ОТПРАВИТЬ</button>
+        </div>
+    </div>
+
+    <script>
+        const IMGBB_KEY = 'f6cba694da291b70a356116b49b5f595';
+        const TOKEN = 'c769f162-aa70-425b-aac1-6114cce14e6f';
+        const PROJECT_ID = 'P-49568f0c-247b-4407-8ac7-77557ee092f4';
+        let quickPhotoUrl = '';
+
+        // Загрузка последних событий
+        function loadLastIssues() {
+            fetch('https://api.singularity-app.com/v2/task?projectId=' + PROJECT_ID + '&maxCount=5', {
+                headers: { 'Authorization': 'Bearer ' + TOKEN }
+            })
+            .then(r => r.json())
+            .then(tasks => {
+                const container = document.getElementById('last-issues');
+                if (!tasks.length) {
+                    container.innerHTML = '<div style="text-align:center;color:#8e8e93;font-size:14px;">Нет событий</div>';
+                    return;
+                }
+                container.innerHTML = '<div style="font-size:13px;color:#8e8e93;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">📋 Последние события</div>' +
+                    tasks.slice(0, 5).map(t => {
+                        const title = t.title || '';
+                        let dotClass = 'green';
+                        if (title.includes('🔴')) dotClass = 'red';
+                        else if (title.includes('🟡')) dotClass = 'yellow';
+                        const node = t.note ? (t.note.match(/Узел: (.+)/) || ['', '—'])[1] : '—';
+                        const date = t.createdDate ? new Date(t.createdDate).toLocaleDateString('ru-RU') : '';
+                        return `<div class="issue"><span class="dot ${dotClass}"></span> ${title} • ${node} <span style="margin-left:auto;color:#c7c7cc;font-size:12px;">${date}</span></div>`;
+                    }).join('');
+            })
+            .catch(() => {
+                document.getElementById('last-issues').innerHTML = '<div style="text-align:center;color:#8e8e93;font-size:14px;">Нет связи</div>';
+            });
+        }
+
+        function openQuickForm() { document.getElementById('modal-overlay').classList.add('active'); }
+        function closeQuickForm() { document.getElementById('modal-overlay').classList.remove('active'); }
+
+        function updateQuickDesc() {
+            const checked = [...document.querySelectorAll('#quick-problems input:checked')].map(c => c.value);
+            document.getElementById('quick-desc').value = checked.join('; ');
+        }
+
+        function quickVoice() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) { alert('Голосовой ввод не поддерживается.'); return; }
+            const rec = new SpeechRecognition(); rec.lang = 'ru-RU'; rec.interimResults = false; rec.start();
+            const btn = document.querySelector('.voice-btn'); btn.textContent = '🎤 Говорите...'; btn.style.background = '#ff3b30'; btn.style.color = '#fff';
+            rec.onresult = e => { document.getElementById('quick-desc').value = e.results[0][0].transcript; btn.textContent = '🎤 Нажмите и говорите'; btn.style.background = '#f2f2f7'; btn.style.color = '#007aff'; };
+            rec.onerror = () => { btn.textContent = '🎤 Нажмите и говорите'; btn.style.background = '#f2f2f7'; btn.style.color = '#007aff'; };
+        }
+
+        function quickPhotoAttached() {
+            const file = document.getElementById('quick-photo').files[0];
+            if (!file) return;
+            document.getElementById('quick-photo-text').textContent = '📎 ' + file.name;
+            const status = document.getElementById('quick-upload-status');
+            status.style.display = 'block'; status.textContent = '⏳ Загрузка...'; status.style.color = '#007aff';
+            const fd = new FormData(); fd.append('image', file);
+            fetch('https://api.imgbb.com/1/upload?key=' + IMGBB_KEY, { method: 'POST', body: fd })
+            .then(r => r.json()).then(data => {
+                if (data.success) { quickPhotoUrl = data.data.url; status.textContent = '✅ Загружено'; status.style.color = '#34c759'; }
+                else throw new Error('Upload failed');
+            }).catch(() => { status.textContent = '❌ Ошибка'; status.style.color = '#ff3b30'; });
+        }
+
+        function quickSubmit() {
+            const node = document.getElementById('quick-node').value;
+            const desc = document.getElementById('quick-desc').value.trim();
+            if (!node) { alert('Выберите узел!'); return; }
+            if (!desc) { alert('Опишите проблему!'); return; }
+
+            const btn = document.getElementById('quick-submit');
+            btn.textContent = '⏳...'; btn.disabled = true;
+
+            const note = `Объект: Флотатор автомойка Северный\nУзел: ${node}\nТип: 🔴 Дефект\nСрочность: 🔴 Критично\nОписание: ${desc}\nМатериалы: Не указаны\nДата: ${new Date().toLocaleString('ru-RU')}\nФото: ${quickPhotoUrl || 'Нет'}`;
+
+            fetch('https://api.singularity-app.com/v2/task', {
+                method: 'POST',
+                headers: { 'Authorization': 'Bearer ' + TOKEN, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title: '🔴 Дефект — ' + node, note: note, projectId: PROJECT_ID, priority: 0 })
+            })
+            .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+            .then(() => {
+                const toast = document.getElementById('toast'); toast.classList.add('show');
+                setTimeout(() => { toast.classList.remove('show'); closeQuickForm(); btn.textContent = '✅ ОТПРАВИТЬ'; btn.disabled = false; }, 1500);
+                loadLastIssues();
+            })
+            .catch(() => { alert('Ошибка отправки.'); btn.textContent = '✅ ОТПРАВИТЬ'; btn.disabled = false; });
+        }
+
+        loadLastIssues();
+    </script>
 </body>
 </html>
